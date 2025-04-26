@@ -1,0 +1,12 @@
+torch>=2.0.0
+demucs>=4.0.0
+ffmpeg-python>=0.2.0
+soundfile>=0.12.1
+diffq>=0.2.0
+streamlit>=1.32.0
+
+# System requirements:
+# - FFmpeg must be installed on your system
+#   On macOS: brew install ffmpeg
+#   On Ubuntu/Debian: sudo apt-get install ffmpeg
+#   On Windows: Download from https://ffmpeg.org/download.html 
