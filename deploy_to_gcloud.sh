@@ -2,7 +2,7 @@
 
 # Google Cloud project details
 PROJECT_ID="voice-separator-458012"
-REGION="europe-southwest1"
+REGION="europe-west1"
 SERVICE_NAME="voice-separator"
 
 log_in() {
@@ -45,7 +45,8 @@ gcloud run deploy $SERVICE_NAME \
   --source . \
   --platform managed \
   --region $REGION \
-  --memory 1Gi \
+  --memory 4Gi \
+  --cpu 4 \
   --allow-unauthenticated
 
 echo "Deployment complete! Visit the Cloud Run service URL to access your app." 
