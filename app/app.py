@@ -60,56 +60,56 @@ Upload an audio file and get separate tracks for vocals and melody.
         st.markdown("---")
         
         # Process button
-        if st.button("Separate Tracks"):
+        # if st.button("Separate Tracks"):
+        try:
+            # Get the base name without extension
+            base_name = os.path.splitext(uploaded_file.name)[0]
+            
+            # Create a progress container
+            progress_container = st.empty()
+            progress_container.markdown('<div class="progress-message">Processing audio... This may take a few minutes.</div>', unsafe_allow_html=True)
+            
+            # Process the audio
+            output_vocals, output_melody = separate_audio(tmp_path, base_name)
+            
+            # Clear progress message
+            progress_container.empty()
+            
+            # Display results
+            st.success("Processing complete!")
+            
+            # Create two columns for the audio players
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.subheader("Vocals")
+                st.audio(output_vocals)
+                st.download_button(
+                    label="Download Vocals",
+                    data=open(output_vocals, 'rb').read(),
+                    file_name=f"{base_name}_vocals.wav",
+                    mime="audio/wav"
+                )
+            
+            with col2:
+                st.subheader("Melody")
+                st.audio(output_melody)
+                st.download_button(
+                    label="Download Melody",
+                    data=open(output_melody, 'rb').read(),
+                    file_name=f"{base_name}_melody.wav",
+                    mime="audio/wav"
+                )
+            
+        except Exception as e:
+            st.error(f"An error occurred: {str(e)}")
+            st.markdown(f'<div class="error-message">Error details: {str(e)}</div>', unsafe_allow_html=True)
+        finally:
+            # Clean up temporary file
             try:
-                # Get the base name without extension
-                base_name = os.path.splitext(uploaded_file.name)[0]
-                
-                # Create a progress container
-                progress_container = st.empty()
-                progress_container.markdown('<div class="progress-message">Processing audio... This may take a few minutes.</div>', unsafe_allow_html=True)
-                
-                # Process the audio
-                output_vocals, output_melody = separate_audio(tmp_path, base_name)
-                
-                # Clear progress message
-                progress_container.empty()
-                
-                # Display results
-                st.success("Processing complete!")
-                
-                # Create two columns for the audio players
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.subheader("Vocals")
-                    st.audio(output_vocals)
-                    st.download_button(
-                        label="Download Vocals",
-                        data=open(output_vocals, 'rb').read(),
-                        file_name=f"{base_name}_vocals.wav",
-                        mime="audio/wav"
-                    )
-                
-                with col2:
-                    st.subheader("Melody")
-                    st.audio(output_melody)
-                    st.download_button(
-                        label="Download Melody",
-                        data=open(output_melody, 'rb').read(),
-                        file_name=f"{base_name}_melody.wav",
-                        mime="audio/wav"
-                    )
-                
-            except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
-                st.markdown(f'<div class="error-message">Error details: {str(e)}</div>', unsafe_allow_html=True)
-            finally:
-                # Clean up temporary file
-                try:
-                    os.unlink(tmp_path)
-                except:
-                    pass
+                os.unlink(tmp_path)
+            except:
+                pass
 
     # Add some helpful information
     st.markdown(
@@ -125,7 +125,7 @@ Upload an audio file and get separate tracks for vocals and melody.
     st.markdown("---")
     st.markdown("Made with ❤️ using Streamlit and Demucs")
     st.markdown(
-        '<div style="margin: 1em 0;"><a href="https://buymeacoffee.com/br3gan" target="_blank" style="font-size:1.5em; font-weight:bold; color:#E91E63; text-decoration:none;">☕ Buy Me a Coffee</a></div>',
+        '<div style="margin: 1em 0;"><a href="https://buymeacoffee.com/br3gan" target="_blank" style="font-size:1.5em; font-weight:bold; color:#FFDD00; text-decoration:none;">☕ Buy Me a Coffee</a></div>',
         unsafe_allow_html=True
     )
 
