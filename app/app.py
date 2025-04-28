@@ -236,10 +236,14 @@ if separate_clicked:
         output_vocals, output_melody = separate_audio(process_path, base_name)
         with open(output_vocals, 'rb') as f:
             st.session_state['vocals_bytes'] = f.read()
+            os.remove(output_vocals)
         with open(output_melody, 'rb') as f:
             st.session_state['melody_bytes'] = f.read()
+            os.remove(output_melody)
         with open(process_path, 'rb') as f:
             st.session_state['original_bytes'] = f.read()
+            os.remove(process_path)
+        os.remove(temp_audio_path)
         st.session_state['base_name'] = base_name
         st.session_state['separation_done'] = True
         st.session_state['separating'] = False
@@ -258,51 +262,44 @@ if st.session_state.get('separating', False) and not st.session_state.get('separ
     st.info('Processing is ongoing. This may take a few moments...')
 
 if all(k in st.session_state for k in ['vocals_bytes', 'melody_bytes', 'original_bytes', 'base_name']):
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
         st.subheader("Vocals")
         st.audio(st.session_state['vocals_bytes'], format="audio/wav")
     with col2:
         st.subheader("Melody")
         st.audio(st.session_state['melody_bytes'], format="audio/wav")
+    with col3:
+        st.subheader("Original")
+        st.audio(st.session_state['original_bytes'], format="audio/wav")
     st.markdown("---")
-    st.subheader("Download Results")
-    col_voc, col_mel, col_orig = st.columns(3)
-    with col_voc:
-        st.download_button(
-            label="Download Vocals",
-            data=st.session_state['vocals_bytes'],
-            file_name=f"{st.session_state['base_name']}_vocals.wav",
-            mime="audio/wav"
-        )
-    with col_mel:
-        st.download_button(
-            label="Download Melody",
-            data=st.session_state['melody_bytes'],
-            file_name=f"{st.session_state['base_name']}_melody.wav",
-            mime="audio/wav"
-        )
-    with col_orig:
-        st.download_button(
-            label="Download Original",
-            data=st.session_state['original_bytes'],
-            file_name=f"{st.session_state['base_name']}_original.wav",
-            mime="audio/wav"
-        )
-
-# Add some helpful information
-st.markdown(
-    """
-### Tips:
-- For best results, use high-quality audio files
-- Processing time depends on the length of the audio
-- Supported formats: WAV, MP3, M4A, FLAC
-    """
-)
+    # st.subheader("Download Results")
+    # col_voc, col_mel, col_orig = st.columns(3)
+    # with col_voc:
+    #     st.download_button(
+    #         label="Download Vocals",
+    #         data=st.session_state['vocals_bytes'],
+    #         file_name=f"{st.session_state['base_name']}_vocals.wav",
+    #         mime="audio/wav"
+    #     )
+    # with col_mel:
+    #     st.download_button(
+    #         label="Download Melody",
+    #         data=st.session_state['melody_bytes'],
+    #         file_name=f"{st.session_state['base_name']}_melody.wav",
+    #         mime="audio/wav"
+    #     )
+    # with col_orig:
+    #     st.download_button(
+    #         label="Download Original",
+    #         data=st.session_state['original_bytes'],
+    #         file_name=f"{st.session_state['base_name']}_original.wav",
+    #         mime="audio/wav"
+    #     )
 
 # Add a footer
 st.markdown("---")
-st.markdown("Made with ❤️ using Streamlit and Demucs")
+st.markdown("Made with ❤️ using from [br3gan](https://github.com/sdaveas/voice-separator)")
 st.markdown(
     '<div style="margin: 1em 0;"><a href="https://buymeacoffee.com/br3gan" target="_blank" style="font-size:1.5em; font-weight:bold; color:#1976D2; text-decoration:none;">☕ Buy Me a Coffee</a></div>',
     unsafe_allow_html=True
