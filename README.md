@@ -1,56 +1,77 @@
 # Voice Separator
 
-A web app to separate vocals and melody from your audio files using AI (Demucs) and Streamlit.
+Separate vocals and melody from your audio files with AI.
 
 ## Features
-- Upload an audio file (WAV, MP3, M4A, FLAC)
-- Get separate tracks for vocals and melody
-- Download the separated tracks
-- Powered by Demucs and Streamlit
+- Upload an audio file or provide a YouTube link
+- Select a segment to process (optional)
+- Separate vocals and melody using Demucs
+- Download separated tracks (vocals, melody, original)
 
-## Local Development
+## Installation
 
-### Using pip
-1. **Install dependencies:**
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd voice-separator
+   ```
+
+2. **Install Python dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Run the app locally:**
-   ```bash
-   streamlit run app/app.py
-   ```
-   The app will be available at [http://localhost:8501](http://localhost:8501)
+3. **Install FFmpeg:**
+   - **macOS:** `brew install ffmpeg`
+   - **Ubuntu/Debian:** `sudo apt-get install ffmpeg`
+   - **Windows:** [Download from ffmpeg.org](https://ffmpeg.org/download.html)
 
-### Using pipenv
-1. **Install pipenv (if not already installed):**
-   ```bash
-   pip install pipenv
-   ```
-2. **Install dependencies:**
-   ```bash
-   pipenv install --dev
-   ```
-3. **Activate the virtual environment:**
-   ```bash
-   pipenv shell
-   ```
-4. **Run the app:**
-   ```bash
-   streamlit run app/app.py
-   ```
-   The app will be available at [http://localhost:8501](http://localhost:8501)
+## Usage
 
-### Docker (optional):
-   ```bash
-   docker build -t voice-separator:latest .
-   docker run -p 8080:8080 voice-separator:latest
-   ```
-   The app will be available at [http://localhost:8080](http://localhost:8080)
+Run the Streamlit app locally:
 
-## Buy Me a Coffee
-[☕ Buy Me a Coffee](https://buymeacoffee.com/br3gan)
+```bash
+streamlit run app/app.py
+```
+
+- Open the provided local URL in your browser.
+- Upload an audio file or paste a YouTube link.
+- Optionally select a segment to process.
+- Click **Separate** to process the audio.
+- Download the separated tracks as needed.
+
+## Requirements
+
+- Python 3.8+
+- The following Python packages (see `requirements.txt`):
+  - torch>=2.0.0
+  - demucs>=4.0.0
+  - ffmpeg-python>=0.2.0
+  - soundfile>=0.12.1
+  - diffq>=0.2.0
+  - streamlit>=1.32.0
+  - yt-dlp>=2024.4.9
+  - numpy>=1.26.4
+- FFmpeg (system package, see above)
 
 ---
 
-**Made with ❤️ using Streamlit and Demucs** 
+Made with ❤️ using Streamlit and Demucs
+
+[☕ Buy Me a Coffee](https://buymeacoffee.com/br3gan) 
+
+def download_youtube_audio(yt_url):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': 'temp_audio.%(ext)s',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'wav',
+        }],
+        'cookiefile': 'cookies.txt',
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(yt_url, download=True)
+        temp_audio_path = ydl.prepare_filename(info).replace(info['ext'], 'wav')
+        base_name = info.get('title', 'yt_audio')
+    return temp_audio_path, base_name 

@@ -68,6 +68,7 @@ def download_youtube_audio(yt_url):
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'wav',
         }],
+        'cookiefile': 'cookies.txt',
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(yt_url, download=True)
@@ -273,33 +274,10 @@ if all(k in st.session_state for k in ['vocals_bytes', 'melody_bytes', 'original
         st.subheader("Original")
         st.audio(st.session_state['original_bytes'], format="audio/wav")
     st.markdown("---")
-    # st.subheader("Download Results")
-    # col_voc, col_mel, col_orig = st.columns(3)
-    # with col_voc:
-    #     st.download_button(
-    #         label="Download Vocals",
-    #         data=st.session_state['vocals_bytes'],
-    #         file_name=f"{st.session_state['base_name']}_vocals.wav",
-    #         mime="audio/wav"
-    #     )
-    # with col_mel:
-    #     st.download_button(
-    #         label="Download Melody",
-    #         data=st.session_state['melody_bytes'],
-    #         file_name=f"{st.session_state['base_name']}_melody.wav",
-    #         mime="audio/wav"
-    #     )
-    # with col_orig:
-    #     st.download_button(
-    #         label="Download Original",
-    #         data=st.session_state['original_bytes'],
-    #         file_name=f"{st.session_state['base_name']}_original.wav",
-    #         mime="audio/wav"
-    #     )
 
 # Add a footer
 st.markdown("---")
-st.markdown("Made with ❤️ using from [br3gan](https://github.com/sdaveas/voice-separator)")
+st.markdown("Made with ❤️ from [br3gan](https://github.com/sdaveas/voice-separator)")
 st.markdown(
     '<div style="margin: 1em 0;"><a href="https://buymeacoffee.com/br3gan" target="_blank" style="font-size:1.5em; font-weight:bold; color:#1976D2; text-decoration:none;">☕ Buy Me a Coffee</a></div>',
     unsafe_allow_html=True
