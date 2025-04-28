@@ -4,6 +4,8 @@ ffmpeg-python>=0.2.0
 soundfile>=0.12.1
 diffq>=0.2.0
 streamlit>=1.32.0
+yt-dlp>=2024.4.9
+numpy>=1.26.4
 
 # System requirements:
 # - FFmpeg must be installed on your system
