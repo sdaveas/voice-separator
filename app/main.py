@@ -5,6 +5,7 @@ import soundfile
 import os
 import numpy as np
 import logging
+import re
 from demucs.pretrained import get_model
 from demucs.audio import AudioFile, save_audio
 from demucs.apply import apply_model
@@ -12,6 +13,10 @@ from demucs.apply import apply_model
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def sanitize_filename(name):
+    # Replace non-ASCII and spaces with underscores
+    return re.sub(r'[^A-Za-z0-9_.-]', '_', name)
 
 def enhance_audio(audio, sample_rate):
     """Apply basic audio enhancement to improve quality"""
@@ -39,6 +44,9 @@ def separate_audio(input_file, output_base=None):
             # Use input filename without extension as the base
             input_filename = os.path.basename(input_file)
             output_base = os.path.splitext(input_filename)[0]
+
+        # Sanitize the base name
+        output_base = sanitize_filename(output_base)
 
         # Create output directory if it doesn't exist
         output_dir = os.path.dirname(os.path.abspath(input_file))
